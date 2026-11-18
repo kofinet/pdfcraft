@@ -8,5 +8,6 @@
 pub mod crypto_env;
 pub mod desktop_theme;
 pub mod owner_only;
+pub mod scan;
 pub mod staging;
 pub mod zone;

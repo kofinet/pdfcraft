@@ -1191,6 +1191,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "craft-atomic"
+version = "0.1.0"
+source = "git+https://github.com/kofinet/craft-libs?rev=2bea38b67fab499c60d4475e375975eec5a8abd1#2bea38b67fab499c60d4475e375975eec5a8abd1"
+dependencies = [
+ "rustix 1.1.6",
+]
+
+[[package]]
 name = "craft-cms"
 version = "0.1.0"
 source = "git+https://github.com/storytold/craft-libs?rev=8503f24cb845268f47f97e829491114fe9ad1bfa#8503f24cb845268f47f97e829491114fe9ad1bfa"
@@ -1222,6 +1230,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "craft-devices"
+version = "0.1.0"
+source = "git+https://github.com/kofinet/craft-libs?rev=2bea38b67fab499c60d4475e375975eec5a8abd1#2bea38b67fab499c60d4475e375975eec5a8abd1"
+dependencies = [
+ "craft-atomic",
+ "craft-job",
+ "craft-scan",
+ "serde_json",
+]
+
+[[package]]
 name = "craft-docpath"
 version = "0.1.0"
 source = "git+https://github.com/storytold/craft-libs?rev=e2dc681a3#e2dc681a3ad8a47038da2f11ddd2c5e1c0454991"
@@ -1239,12 +1258,35 @@ dependencies = [
 [[package]]
 name = "craft-fonts-build"
 version = "0.1.0"
-source = "git+https://github.com/storytold/craft-libs?rev=e2dc681a3#e2dc681a3ad8a47038da2f11ddd2c5e1c0454991"
+source = "git+https://github.com/kofinet/craft-libs?rev=2bea38b67fab499c60d4475e375975eec5a8abd1#2bea38b67fab499c60d4475e375975eec5a8abd1"
 
 [[package]]
 name = "craft-html"
 version = "0.1.0"
 source = "git+https://github.com/storytold/craft-libs?rev=fbb3f47f7ae712192586984af11ca8f6c0f64d33#fbb3f47f7ae712192586984af11ca8f6c0f64d33"
+
+[[package]]
+name = "craft-i18n"
+version = "0.1.0"
+source = "git+https://github.com/kofinet/craft-libs?rev=2bea38b67fab499c60d4475e375975eec5a8abd1#2bea38b67fab499c60d4475e375975eec5a8abd1"
+dependencies = [
+ "fixed_decimal",
+ "icu_decimal",
+ "icu_locale_core",
+ "icu_locale_fallback",
+ "icu_normalizer",
+ "icu_plurals",
+ "icu_properties",
+ "icu_provider",
+ "icu_provider_adapters",
+ "icu_provider_blob",
+ "log",
+ "objc2-foundation 0.3.2",
+ "sys-locale",
+ "unicode-bidi",
+ "windows-registry",
+ "writeable",
+]
 
 [[package]]
 name = "craft-i18n"
@@ -1289,6 +1331,14 @@ dependencies = [
  "zune-core",
  "zune-jpeg",
  "zune-jpegxl",
+]
+
+[[package]]
+name = "craft-job"
+version = "0.1.0"
+source = "git+https://github.com/kofinet/craft-libs?rev=2bea38b67fab499c60d4475e375975eec5a8abd1#2bea38b67fab499c60d4475e375975eec5a8abd1"
+dependencies = [
+ "serde",
 ]
 
 [[package]]
@@ -1457,6 +1507,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "craft-scan"
+version = "0.1.0"
+source = "git+https://github.com/kofinet/craft-libs?rev=2bea38b67fab499c60d4475e375975eec5a8abd1#2bea38b67fab499c60d4475e375975eec5a8abd1"
+dependencies = [
+ "craft-job",
+ "image",
+ "png 0.18.1",
+ "serde",
+ "thiserror 2.0.21",
+ "tiff",
+]
+
+[[package]]
 name = "craft-stream-codecs"
 version = "0.1.0"
 source = "git+https://github.com/storytold/craft-libs?rev=8e03cd016d42032b867fef6bad86bc69bf2c1920#8e03cd016d42032b867fef6bad86bc69bf2c1920"
@@ -1479,10 +1542,10 @@ dependencies = [
 [[package]]
 name = "craft-ui"
 version = "0.1.0"
-source = "git+https://github.com/storytold/craft-libs?rev=e2dc681a3#e2dc681a3ad8a47038da2f11ddd2c5e1c0454991"
+source = "git+https://github.com/kofinet/craft-libs?rev=2bea38b67fab499c60d4475e375975eec5a8abd1#2bea38b67fab499c60d4475e375975eec5a8abd1"
 dependencies = [
  "craft-fonts-build",
- "craft-i18n",
+ "craft-i18n 0.1.0 (git+https://github.com/kofinet/craft-libs?rev=2bea38b67fab499c60d4475e375975eec5a8abd1)",
  "egui",
  "epaint",
  "js-sys",
@@ -4698,6 +4761,7 @@ version = "0.21.1"
 dependencies = [
  "base64 0.23.1",
  "craft-cms 0.1.0 (git+https://github.com/storytold/craft-libs?rev=e2dc681a3)",
+ "craft-devices",
  "craft-image-codecs",
  "craft-prc",
  "flate2",
@@ -4722,6 +4786,7 @@ version = "0.21.1"
 dependencies = [
  "base64 0.23.1",
  "craft-image-codecs",
+ "craft-job",
  "pdfcraft-audit",
  "pdfcraft-automation",
  "pdfcraft-cos",
@@ -4992,8 +5057,10 @@ name = "pdfcraft-platform"
 version = "0.21.1"
 dependencies = [
  "async-channel",
+ "craft-scan",
  "futures-lite",
  "log",
+ "pdfcraft-wia",
  "rustix 1.1.6",
  "zbus",
 ]
@@ -5136,7 +5203,7 @@ dependencies = [
  "block2 0.6.2",
  "bytemuck",
  "chrono",
- "craft-i18n",
+ "craft-i18n 0.1.0 (git+https://github.com/storytold/craft-libs?rev=e2dc681a3)",
  "craft-image-codecs",
  "craft-keymap",
  "craft-menu",
@@ -5200,6 +5267,16 @@ dependencies = [
  "serde_json",
  "wasm-bindgen-futures",
  "web-sys",
+]
+
+[[package]]
+name = "pdfcraft-wia"
+version = "0.21.1"
+dependencies = [
+ "craft-scan",
+ "log",
+ "windows",
+ "windows-core",
 ]
 
 [[package]]

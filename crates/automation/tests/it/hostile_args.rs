@@ -178,13 +178,24 @@ fn plausible(def: &pdfcraft_automation::ToolDef) -> serde_json::Map<String, Valu
     obj
 }
 
-/// Run `call`, turning a panic into a message instead of unwinding out of the test.
+/// The scan tools that reach the system's scanners (a listing, or a real scan) stay out of the hostile sweeps
+/// unless the machine's scanners may be touched. `scan_jobs` only reads journals, so it is swept like any other tool.
+fn touches_scanners(tool: &str) -> bool {
+    // A real acquire pulls paper on every call: never part of a sweep.
+    match tool {
+        "scan_acquire" => true,
+        "scan_devices" => std::env::var_os("PDFCRAFT_TEST_REAL_SCANNERS").is_none(),
+        _ => false,
+    }
+}
+
+/// Call `tool` with `args`; any `ToolError` is accepted (the caller was told what was wrong), a panic is an `Err`.
 fn guarded(a: &mut Automation, tool: &str, args: &Value) -> std::result::Result<(), String> {
     let result = catch_unwind(AssertUnwindSafe(|| a.call(tool, args)));
     match result {
         Ok(Ok(_)) => Ok(()),
         // Any ToolError is a good outcome: the agent is told what was wrong.
-        Ok(Err(ToolError::UnknownTool(_) | ToolError::InvalidArgs(_) | ToolError::Failed(_))) => Ok(()),
+        Ok(Err(ToolError::UnknownTool(_) | ToolError::InvalidArgs(_) | ToolError::Failed(_) | ToolError::FailedWith { .. })) => Ok(()),
         Err(panic) => {
             let what = panic
                 .downcast_ref::<&str>()
@@ -272,7 +283,7 @@ fn no_tool_panics_on_hostile_arguments() {
     let mut failures = Vec::new();
     let mut calls = 0usize;
 
-    for def in tools() {
+    for def in tools().into_iter().filter(|def| !touches_scanners(def.name)) {
         empty_dir(&root);
         // The whole arguments object, not just its properties.
         for bad in [json!(null), json!([]), json!("string"), json!(7), json!(true), json!({})] {
@@ -350,7 +361,7 @@ fn no_tool_escapes_the_root() {
         // A real document, so tools reach their path arguments instead of failing on `doc` first.
         let doc = blank_doc(&mut a);
 
-        for def in tools() {
+        for def in tools().into_iter().filter(|def| !touches_scanners(def.name)) {
             for (prop, is_list) in path_props(&def) {
                 for escape in escapes(&base, linked) {
                     let mut obj = plausible_with(&def, Some(doc));
