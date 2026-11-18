@@ -21,7 +21,8 @@ merged yet. Branch: `scan-wia`.
 
 ## Fixes on top of #1724
 
-Found while testing on a Brother DCP-J105 (flatbed only) over the network:
+Found while testing on a Brother DCP-J105 (flatbed only) over the network. They are offered to the pull request as
+[b1tninja/pdfcraft#2](https://github.com/b1tninja/pdfcraft/pull/2), on its own branch:
 
 1. **Flatbed-only scanners have no feeder.**
    - Before, the scanner's only transfer item was lent to the feeder. The Feeder button was enabled, and
